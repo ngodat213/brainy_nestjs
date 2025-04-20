@@ -21,8 +21,9 @@ export class UpdateUserUseCase {
     return {
       id: updatedUser._id.toString(),
       email: updatedUser.email,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
+      username: updatedUser.username,
+      fullName: updatedUser.fullName,
+      avatar: updatedUser.avatar || '',
       role: updatedUser.role,
       isActive: updatedUser.isActive,
       lastLogin: updatedUser.lastLogin,

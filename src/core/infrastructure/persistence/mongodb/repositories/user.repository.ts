@@ -28,6 +28,11 @@ export class UserRepository implements IUserRepository {
     return user ? this.toDomainEntity(user) : null;
   }
 
+  async findOne(query: any): Promise<User | null> {
+    const user = await this.userModel.findOne(query).exec();
+    return user ? this.toDomainEntity(user) : null;
+  }
+
   async findById(id: string): Promise<User | null> {
     const user = await this.userModel.findById(id).exec();
     return user ? this.toDomainEntity(user) : null;

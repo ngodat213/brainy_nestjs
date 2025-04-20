@@ -37,8 +37,9 @@ export class UpdateUserDto {
 export class UserResponseDto {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  username: string;
+  fullName: string;
+  avatar: string;
   role: string;
   isActive: boolean;
   lastLogin?: Date;

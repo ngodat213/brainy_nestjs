@@ -1,25 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { IAuthRepository } from '../../interfaces/auth.interface';
+import { Injectable, Inject } from '@nestjs/common';
+import { AUTH_REPOSITORY, IAuthRepository } from '../../interfaces/auth.interface';
+import { ResetPasswordDto } from '../../dtos/auth.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ResetPasswordUseCase {
-  constructor(private readonly authRepository: IAuthRepository) {}
+  constructor(
+    @Inject(AUTH_REPOSITORY)
+    private readonly authRepository: IAuthRepository,
+  ) {}
 
-  async execute(token: string, newPassword: string): Promise<void> {
-    if (!token) {
-      throw new Error('Token is required');
+  async execute(dto: ResetPasswordDto): Promise<void> {
+    const user = await this.authRepository.findByResetCode(dto.resetCode);
+    if (!user) {
+      throw new Error('Invalid reset code');
     }
 
-    if (!newPassword) {
-      throw new Error('New password is required');
+    if (user.resetPasswordExpires < new Date()) {
+      throw new Error('Reset code has expired');
     }
 
-    if (newPassword.length < 6) {
-      throw new Error('Password must be at least 6 characters');
-    }
-
-    // TODO: Validate token
-    // TODO: Update password
-    throw new Error('Method not implemented.');
+    const hashedPassword = await bcrypt.hash(dto.newPassword, 10);
+    await this.authRepository.update(user.id, {
+      password: hashedPassword,
+      resetPasswordCode: null,
+      resetPasswordExpires: null,
+    });
   }
 } 

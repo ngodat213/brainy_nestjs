@@ -23,4 +23,12 @@ export class AuthRepository implements IAuthRepository {
       fullName: username,
     });
   }
+
+  async update(id: string, data: any): Promise<User> {
+    return this.userRepository.update(id, data);
+  }
+
+  async findByResetCode(resetCode: string): Promise<User | null> {
+    return this.userRepository.findOne({ resetPasswordCode: resetCode });
+  }
 } 

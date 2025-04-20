@@ -15,10 +15,13 @@ export class User extends Document {
   password: string;
 
   @Prop({ required: true })
-  firstName: string;
+  username: string;
 
   @Prop({ required: true })
-  lastName: string;
+  fullName: string;
+
+  @Prop()
+  avatar?: string;
 
   @Prop({ default: UserRole.USER })
   role: UserRole;
@@ -28,6 +31,24 @@ export class User extends Document {
 
   @Prop()
   lastLogin?: Date;
+
+  @Prop()
+  resetPasswordCode?: string;
+
+  @Prop()
+  resetPasswordExpires?: Date;
+
+  @Prop({ type: [String], default: [] })
+  revokedTokens: string[];
+
+  @Prop({ default: false })
+  isEmailVerified: boolean;
+
+  @Prop()
+  emailVerificationCode?: string;
+
+  @Prop()
+  emailVerificationExpires?: Date;
 
   @Prop()
   createdAt: Date;

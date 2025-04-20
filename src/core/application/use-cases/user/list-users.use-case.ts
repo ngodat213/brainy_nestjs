@@ -12,8 +12,9 @@ export class ListUsersUseCase {
     return users.map(user => ({
       id: user.id,
       email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      username: user.username,
+      fullName: user.fullName,
+      avatar: user.avatar || '',
       role: user.role,
       isActive: user.isActive,
       lastLogin: user.lastLogin,

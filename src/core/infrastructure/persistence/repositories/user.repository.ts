@@ -37,6 +37,14 @@ export class UserRepository implements IUserRepository {
     return this.toEntity(user);
   }
 
+  async findOne(query: any): Promise<User | null> {
+    const user = await this.userModel.findOne(query).exec();
+    if (!user) {
+      return null;
+    }
+    return this.toEntity(user);
+  }
+
   async update(id: string, data: Partial<User>): Promise<User> {
     const user = await this.userModel.findByIdAndUpdate(
       id,
@@ -62,13 +70,16 @@ export class UserRepository implements IUserRepository {
       id: user._id.toString(),
       email: user.email,
       password: user.password,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      username: user.username,
+      fullName: user.fullName,
+      avatar: user.avatar,
       role: user.role,
       isActive: user.isActive,
       lastLogin: user.lastLogin,
+      resetPasswordCode: user.resetPasswordCode,
+      resetPasswordExpires: user.resetPasswordExpires,
       createdAt: user.createdAt,
-      updatedAt: user.updatedAt
+      updatedAt: user.updatedAt,
     });
     return userInstance;
   }

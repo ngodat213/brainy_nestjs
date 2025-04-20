@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { AUTH_REPOSITORY, IAuthRepository } from '../../interfaces/auth.interface';
 import { LoginDto, TokenPair } from '../../dtos/auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class LoginUseCase {
@@ -17,10 +18,10 @@ export class LoginUseCase {
       throw new Error('Invalid credentials');
     }
 
-    // TODO: Add password validation
-    // if (!bcrypt.compareSync(dto.password, user.password)) {
-    //   throw new Error('Invalid credentials');
-    // }
+    const isPasswordValid = await bcrypt.compare(dto.password, user.password);
+    if (!isPasswordValid) {
+      throw new Error('Invalid credentials');
+    }
 
     const accessToken = this.jwtService.sign({ sub: user.id });
     const refreshToken = this.jwtService.sign(
@@ -28,6 +29,9 @@ export class LoginUseCase {
       { expiresIn: '7d' },
     );
 
-    return { accessToken, refreshToken };
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 } 

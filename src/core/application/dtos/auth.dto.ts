@@ -29,6 +29,23 @@ export class RegisterDto {
   fullName: string;
 }
 
+export class ForgotPasswordDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+}
+
+export class ResetPasswordDto {
+  @IsString()
+  @IsNotEmpty()
+  resetCode: string;
+
+  @IsString()
+  @MinLength(6)
+  @IsNotEmpty()
+  newPassword: string;
+}
+
 export class RefreshTokenDto {
   @IsString()
   @IsNotEmpty()
